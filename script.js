@@ -1,3 +1,4 @@
+// step 1: declare the variable for all buttons
 const playlistSongs = document.getElementById("playlist-songs");
 const playButton = document.getElementById("play");
 const pauseButton = document.getElementById("pause");
@@ -5,6 +6,7 @@ const nextButton = document.getElementById("next");
 const previousButton = document.getElementById("previous");
 const shuffleButton = document.getElementById("shuffle");
 
+// step 2: create a json for all songs
 const allSongs = [
     {
         id: 0,
@@ -79,12 +81,14 @@ const allSongs = [
 ];
 
 const audio = new Audio();
+// step 3: create a Json for the current song and contain the all song Json
 let userData = {
     songs: [...allSongs],
     currentSong: null,
     songCurrentTime: 0,
 };
 
+// playSong function 
 const playSong = (id) => {
     const song = userData?.songs.find((song) => song.id === id);
     audio.src = song.src;
@@ -104,6 +108,7 @@ const playSong = (id) => {
     audio.play();
 };
 
+// pauseSong function
 const pauseSong = () => {
     userData.songCurrentTime = audio.currentTime;
 
@@ -111,17 +116,20 @@ const pauseSong = () => {
     audio.pause();
 };
 
+// playnextsong function
 const playNextSong = () => {
     if (userData?.currentSong === null) {
         playSong(userData?.songs[0].id);
     } else {
         const currentSongIndex = getCurrentSongIndex();
+        // symbol ?. is for the userData doesn't have the songs key
         const nextSong = userData?.songs[currentSongIndex + 1];
 
         playSong(nextSong.id);
     }
 };
 
+// playPreviousSong function
 const playPreviousSong = () => {
     if (userData?.currentSong === null) return;
     else {
@@ -132,6 +140,7 @@ const playPreviousSong = () => {
     }
 };
 
+// shuffle function 
 const shuffle = () => {
     userData?.songs.sort(() => Math.random() - 0.5);
     userData.currentSong = null;
@@ -143,6 +152,7 @@ const shuffle = () => {
     setPlayButtonAccessibleText();
 };
 
+// deleteSong function 
 const deleteSong = (id) => {
     if (userData?.currentSong?.id === id) {
         userData.currentSong = null;
@@ -201,6 +211,7 @@ const highlightCurrentSong = () => {
     if (songToHighlight) songToHighlight.setAttribute("aria-current", "true");
 };
 
+// find the songs for displaying the picture
 const renderSongs = (array) => {
     const songsHTML = array
         .map((song) => {
@@ -242,6 +253,7 @@ playButton.addEventListener("click", () => {
     }
 });
 
+// set the event listener for all buttons
 pauseButton.addEventListener("click", pauseSong);
 
 nextButton.addEventListener("click", playNextSong);
